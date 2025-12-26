@@ -242,7 +242,7 @@
             ytPlayer = new YT.Player("yt-player", {
                 height: "0",
                 width: "0",
-                videoId: "euoOOSdxGPo", // первое видео, с которого стартуем
+                videoId: "AEjersZZnW4", // ← сюда подставишь свой ID
                 playerVars: {
                     autoplay: 0,
                     controls: 0,
@@ -250,8 +250,8 @@
                     fs: 0,
                     modestbranding: 1,
                     rel: 0,
-                    listType: "playlist",
-                    list: "PLz2olpIxPfNTIu-Rw-mP3tgTrcvM1Sv0P", // <-- ID плейлиста
+                    loop: 1,
+                    playlist: "AEjersZZnW4", // важно для зацикливания одного видео
                 },
             });
         }
