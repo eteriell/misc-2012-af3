@@ -1,263 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aesthetic Time Widget</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aesthetic Time Widget</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
-    rel="stylesheet"
-  />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Space Grotesk", sans-serif;
-      background-image: url("image.jpg");
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: black;
-      position: relative;
-      overflow: hidden;
-    }
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Space Grotesk", sans-serif;
+            background-image: url("image.jpg");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: black;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .video-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      opacity: 0;                
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
 
-    .video-bg iframe {
-      width: 120vw;
-      height: 120vh;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+        .video-bg iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120vw;
+            height: 120vh;
+            transform: translate(-50%, -50%);
+        }
 
-    .widget {
-      text-align: center;
-      padding: 30px;
-      width: 380px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 1px;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(0, 0, 0, 0.2);
-    }
+        .widget {
+            text-align: center;
+            padding: 30px;
+            width: 380px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
 
-    .time {
-      font-size: 56px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
+        .time {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
-    .date {
-      font-size: 16px;
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      color: #f8f8ff;
-    }
+        .date {
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #f8f8ff;
+        }
 
-    .day {
-      font-size: 28px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 5px;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-    }
+        .day {
+            font-size: 28px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
 
-    .quote-container {
-      margin-top: 5px;
-      padding: 5px;
-      border-radius: 1px;
-      background: rgba(0, 0, 0, 0.3);
-      color: #b0c4de;
-    }
+        .quote-container {
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 1px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #b0c4de;
+        }
 
-    .quote {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 18px;
-      font-style: italic;
-      line-height: 1.5;
-      margin-bottom: 5px;
-    }
+        .quote {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
 
-    .author {
-      font-family: "Consolas", monospace;
-      font-size: 14px;
-      text-align: right;
-      color: #ffffff;
-      margin-top: 10px;
-    }
-  </style>
+        .author {
+            font-family: "Consolas", monospace;
+            font-size: 14px;
+            text-align: right;
+            color: #ffffff;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="video-bg" id="video-bg">
-    <div id="yt-player"></div>
-  </div>
-
-  <div class="widget">
-    <div class="day" id="day">Friday</div>
-    <div class="date" id="date">December 26, 2025</div>
-    <div class="time" id="time">16:39:11</div>
-
-    <div class="quote-container">
-      <div class="quote" id="quote">
-        Every moment is a fresh beginning.
-      </div>
-      <div class="author" id="author"></div>
+    <div class="video-bg" id="video-bg">
+        <div id="yt-player"></div>
     </div>
-  </div>
 
-  <script>
-    const quotes = [
-      {
-        text: "The future belongs to those who believe in the beauty of their dreams.",
-        author: "Eleanor Roosevelt",
-      },
-      {
-        text: "Strive not to be a success, but rather to be of value.",
-        author: "Albert Einstein",
-      },
-      {
-        text: "Every moment is a fresh beginning.",
-        author: "T.S. Eliot",
-      },
-      {
-        text: "Believe you can and you're halfway there.",
-        author: "Theodore Roosevelt",
-      },
-      {
-        text: "The only way to do great work is to love what you do.",
-        author: "Steve Jobs",
-      },
-      {
-        text: "The best way to predict the future is to create it.",
-        author: "Peter Drucker",
-      },
-      {
-        text: "The best preparation for tomorrow is doing your best today.",
-        author: "H. Jackson Brown Jr.",
-      },
-      {
-        text: "The only limit to our realization of tomorrow will be our doubts of today.",
-        author: "Franklin D. Roosevelt",
-      },
-      {
-        text: "Action is the foundational key to all success.",
-        author: "Pablo Picasso",
-      },
-      {
-        text: "Discipline is the bridge between goals and accomplishment.",
-        author: "Jim Rohn",
-      },
-    ];
+    <div class="widget">
+        <div class="day" id="day">Friday</div>
+        <div class="date" id="date">December 26, 2025</div>
+        <div class="time" id="time">16:39:11</div>
 
-    function updateTimeAndDate() {
-      const currentDate = new Date();
-      const hours = String(currentDate.getHours()).padStart(2, "0");
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-      const seconds = String(currentDate.getSeconds()).padStart(2, "0");
-      const time = `${hours}:${minutes}:${seconds}`;
+        <div class="quote-container">
+            <div class="quote" id="quote">
+                Every moment is a fresh beginning.
+            </div>
+            <div class="author" id="author"></div>
+        </div>
+    </div>
 
-      const options = {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      };
+    <script>
+        const quotes = [
+            {
+                text: "The future belongs to those who believe in the beauty of their dreams.",
+                author: "Eleanor Roosevelt",
+            },
+            {
+                text: "Strive not to be a success, but rather to be of value.",
+                author: "Albert Einstein",
+            },
+            {
+                text: "Every moment is a fresh beginning.",
+                author: "T.S. Eliot",
+            },
+            {
+                text: "Believe you can and you're halfway there.",
+                author: "Theodore Roosevelt",
+            },
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs",
+            },
+            {
+                text: "The best way to predict the future is to create it.",
+                author: "Peter Drucker",
+            },
+            {
+                text: "The best preparation for tomorrow is doing your best today.",
+                author: "H. Jackson Brown Jr.",
+            },
+            {
+                text: "The only limit to our realization of tomorrow will be our doubts of today.",
+                author: "Franklin D. Roosevelt",
+            },
+            {
+                text: "Action is the foundational key to all success.",
+                author: "Pablo Picasso",
+            },
+            {
+                text: "Discipline is the bridge between goals and accomplishment.",
+                author: "Jim Rohn",
+            },
+        ];
 
-      const fullDate = currentDate.toLocaleDateString("en-US", options);
-      const [weekday, ...rest] = fullDate.split(", ");
+        function updateTimeAndDate() {
+            const currentDate = new Date();
+            const hours = String(currentDate.getHours()).padStart(2, "0");
+            const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+            const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+            const time = `${hours}:${minutes}:${seconds}`;
 
-      document.getElementById("day").textContent = weekday;
-      document.getElementById("date").textContent = rest.join(", ");
-      document.getElementById("time").textContent = time;
-    }
+            const options = {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+            };
 
-    function formatQuote(text) {
-      return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
-    }
+            const fullDate = currentDate.toLocaleDateString("en-US", options);
+            const [weekday, ...rest] = fullDate.split(", ");
 
-    function setRandomQuote() {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      const selectedQuote = quotes[randomIndex];
+            document.getElementById("day").textContent = weekday;
+            document.getElementById("date").textContent = rest.join(", ");
+            document.getElementById("time").textContent = time;
+        }
 
-      document.getElementById("quote").innerHTML = formatQuote(
-        selectedQuote.text
-      );
-    }
+        function formatQuote(text) {
+            return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
+        }
 
-    updateTimeAndDate();
-    setRandomQuote();
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selectedQuote = quotes[randomIndex];
 
-    setInterval(updateTimeAndDate, 1000);
-    setInterval(setRandomQuote, 60000);
-  </script>
+            document.getElementById("quote").innerHTML = formatQuote(
+                selectedQuote.text
+            );
+        }
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    const dayElement = document.getElementById("day");
-    const videoBg = document.getElementById("video-bg");
-    let ytPlayer;
-    let isPlaying = false;
+        updateTimeAndDate();
+        setRandomQuote();
 
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player("yt-player", {
-        height: "100%",
-        width: "100%",
-        videoId: "DEWzT1geuPU",
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          loop: 1,
-          playlist: "DEWzT1geuPU",
-        },
-      });
-    }
+        setInterval(updateTimeAndDate, 1000);
+        setInterval(setRandomQuote, 60000);
+    </script>
 
-    dayElement.style.cursor = "pointer";
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const dayElement = document.getElementById("day");
+        const videoBg = document.getElementById("video-bg");
+        let ytPlayer;
+        let isPlaying = false;
 
-    dayElement.addEventListener("click", () => {
-      if (!ytPlayer) return;
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player("yt-player", {
+                height: "100%",
+                width: "100%",
+                videoId: "DEWzT1geuPU",
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    loop: 1,
+                    playlist: "DEWzT1geuPU",
+                },
+            });
+        }
 
-      if (!isPlaying) {
-        ytPlayer.playVideo();
-        isPlaying = true;
-        videoBg.style.opacity = "1";                
-        document.body.style.backgroundImage = "none";
-      } else {
-        ytPlayer.pauseVideo();
-        isPlaying = false;
-        videoBg.style.opacity = "0";                 
-        document.body.style.backgroundImage = 'url("image.jpg")';
-      }
-    });
-  </script>
+        dayElement.style.cursor = "pointer";
+
+        dayElement.addEventListener("click", () => {
+            if (!ytPlayer) return;
+
+            if (!isPlaying) {
+                ytPlayer.playVideo();
+                isPlaying = true;
+                videoBg.style.opacity = "1";
+                document.body.style.backgroundImage = "none";
+            } else {
+                ytPlayer.pauseVideo();
+                isPlaying = false;
+                videoBg.style.opacity = "0";
+                document.body.style.backgroundImage = 'url("image.jpg")';
+            }
+        });
+    </script>
 </body>
+
 </html>
