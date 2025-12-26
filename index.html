@@ -235,11 +235,11 @@
       try {
         if (audio.paused) {
           await audio.play();
-          soundToggle.textContent = "◼︎";
+          soundToggle.textContent = "Pause sound";
           soundToggle.classList.add("playing");
         } else {
           audio.pause();
-          soundToggle.textContent = "►";
+          soundToggle.textContent = "Play";
           soundToggle.classList.remove("playing");
         }
       } catch (e) {
