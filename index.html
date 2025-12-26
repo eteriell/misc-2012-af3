@@ -262,12 +262,12 @@
             if (!isPlaying) {
                 ytPlayer.playVideo();
                 isPlaying = true;
-                soundToggle.textContent = "Pause sound";
+                soundToggle.textContent = "Pause";
                 soundToggle.classList.add("playing");
             } else {
                 ytPlayer.pauseVideo();
                 isPlaying = false;
-                soundToggle.textContent = "Play sound";
+                soundToggle.textContent = "Play";
                 soundToggle.classList.remove("playing");
             }
         });
