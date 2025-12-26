@@ -33,7 +33,7 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      opacity: 0;
+      opacity: 0;                
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
@@ -237,7 +237,6 @@
           rel: 0,
           loop: 1,
           playlist: "DEWzT1geuPU",
-          mute: 0,
         },
       });
     }
@@ -250,12 +249,12 @@
       if (!isPlaying) {
         ytPlayer.playVideo();
         isPlaying = true;
-        videoBg.style.opacity = "1";
+        videoBg.style.opacity = "1";                
         document.body.style.backgroundImage = "none";
       } else {
         ytPlayer.pauseVideo();
         isPlaying = false;
-        videoBg.style.opacity = "0";
+        videoBg.style.opacity = "0";                 
         document.body.style.backgroundImage = 'url("image.jpg")';
       }
     });
