@@ -25,6 +25,26 @@
       align-items: center;
       height: 100vh;
       color: black;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .video-bg iframe {
+      width: 120vw;
+      height: 120vh;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .widget {
@@ -89,24 +109,18 @@
       color: #ffffff;
       margin-top: 10px;
     }
-
-    #yt-player-container {
-      width: 0;
-      height: 0;
-      overflow: hidden;
-    }
   </style>
 </head>
 
 <body>
+  <div class="video-bg" id="video-bg">
+    <div id="yt-player"></div>
+  </div>
+
   <div class="widget">
     <div class="day" id="day">Friday</div>
     <div class="date" id="date">December 26, 2025</div>
     <div class="time" id="time">16:39:11</div>
-
-    <div id="yt-player-container">
-      <div id="yt-player"></div>
-    </div>
 
     <div class="quote-container">
       <div class="quote" id="quote">
@@ -205,14 +219,15 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const dayElement = document.getElementById("day");
+    const videoBg = document.getElementById("video-bg");
     let ytPlayer;
     let isPlaying = false;
 
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player("yt-player", {
-        height: "0",
-        width: "0",
-        videoId: "AEjersZZnW4",
+        height: "100%",
+        width: "100%",
+        videoId: "DEWzT1geuPU",
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -221,7 +236,8 @@
           modestbranding: 1,
           rel: 0,
           loop: 1,
-          playlist: "AEjersZZnW4",
+          playlist: "DEWzT1geuPU",
+          mute: 0,
         },
       });
     }
@@ -234,9 +250,13 @@
       if (!isPlaying) {
         ytPlayer.playVideo();
         isPlaying = true;
+        videoBg.style.opacity = "1";
+        document.body.style.backgroundImage = "none";
       } else {
         ytPlayer.pauseVideo();
         isPlaying = false;
+        videoBg.style.opacity = "0";
+        document.body.style.backgroundImage = 'url("image.jpg")';
       }
     });
   </script>
