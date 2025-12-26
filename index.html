@@ -112,7 +112,6 @@
             color: #ffffff;
         }
 
-        /* скрываем сам iframe */
         #yt-player-container {
             width: 0;
             height: 0;
@@ -126,12 +125,10 @@
         <div class="day" id="day">Friday</div>
         <div class="date" id="date">December 26, 2025</div>
 
-        <!-- Кнопка музыки -->
         <button class="sound-toggle" id="sound-toggle">Play sound</button>
 
         <div class="time" id="time">16:39:11</div>
 
-        <!-- Спрятанный контейнер под YouTube-плеер -->
         <div id="yt-player-container">
             <div id="yt-player"></div>
         </div>
@@ -227,22 +224,20 @@
         setRandomQuote();
 
         setInterval(updateTimeAndDate, 1000);
-        setInterval(setRandomQuote, 60000); // Change quote every minute
+        setInterval(setRandomQuote, 60000);
     </script>
 
-    <!-- YouTube IFrame API -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         const soundToggle = document.getElementById("sound-toggle");
         let ytPlayer;
         let isPlaying = false;
 
-        // Функция, которую вызовет YouTube API, когда загрузится скрипт
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player("yt-player", {
                 height: "0",
                 width: "0",
-                videoId: "AEjersZZnW4", // ← сюда подставишь свой ID
+                videoId: "AEjersZZnW4",
                 playerVars: {
                     autoplay: 0,
                     controls: 0,
@@ -251,7 +246,7 @@
                     modestbranding: 1,
                     rel: 0,
                     loop: 1,
-                    playlist: "AEjersZZnW4", // важно для зацикливания одного видео
+                    playlist: "AEjersZZnW4",
                 },
             });
         }
