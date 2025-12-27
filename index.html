@@ -9,259 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
-</head>
-
-<body>
-    <div class="video-bg" id="video-bg">
-        <div id="yt-audio"></div>
-        <div id="yt-player-hours"></div>
-        <div id="yt-player-minutes"></div>
-        <div id="yt-player-seconds"></div>
-    </div>
-
-    <div class="widget">
-        <div class="day" id="day">Friday</div>
-        <div class="date" id="date"><span id="date-month"></span> <span id="date-day"></span>, <span id="date-year"></span></div>
-
-        <div class="time" id="time">
-            <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
-        </div>
-
-        <div class="quote-container">
-            <div class="quote" id="quote">
-                Every moment is a fresh beginning.
-            </div>
-            <div class="author" id="author"></div>
-        </div>
-    </div>
-
-    <script>
-        const quotes = [
-            {
-                text: "The future belongs to those who believe in the beauty of their dreams.",
-                author: "Eleanor Roosevelt",
-            },
-            {
-                text: "Strive not to be a success, but rather to be of value.",
-                author: "Albert Einstein",
-            },
-            {
-                text: "Every moment is a fresh beginning.",
-                author: "T.S. Eliot",
-            },
-            {
-                text: "Believe you can and you're halfway there.",
-                author: "Theodore Roosevelt",
-            },
-            {
-                text: "The only way to do great work is to love what you do.",
-                author: "Steve Jobs",
-            },
-            {
-                text: "The best way to predict the future is to create it.",
-                author: "Peter Drucker",
-            },
-            {
-                text: "The best preparation for tomorrow is doing your best today.",
-                author: "H. Jackson Brown Jr.",
-            },
-            {
-                text: "The only limit to our realization of tomorrow will be our doubts of today.",
-                author: "Franklin D. Roosevelt",
-            },
-            {
-                text: "Action is the foundational key to all success.",
-                author: "Pablo Picasso",
-            },
-            {
-                text: "Discipline is the bridge between goals and accomplishment.",
-                author: "Jim Rohn",
-            },
-        ];
-
-        function updateTimeAndDate() {
-            const currentDate = new Date();
-            const hours = String(currentDate.getHours()).padStart(2, "0");
-            const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-            const seconds = String(currentDate.getSeconds()).padStart(2, "0");
-
-            const options = {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-            };
-
-            const fullDate = currentDate.toLocaleDateString("en-US", options);
-            const [weekday, monthDay, year] = fullDate.split(", ");
-            const [month, day] = monthDay.split(" ");
-
-            document.getElementById("day").textContent = weekday;
-            document.getElementById("date-month").textContent = month;
-            document.getElementById("date-day").textContent = day;
-            document.getElementById("date-year").textContent = year;
-
-            document.getElementById("time-hours").textContent = hours;
-            document.getElementById("time-minutes").textContent = minutes;
-            document.getElementById("time-seconds").textContent = seconds;
-        }
-
-        function formatQuote(text) {
-            return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
-        }
-
-        function setRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            const selectedQuote = quotes[randomIndex];
-
-            document.getElementById("quote").innerHTML = formatQuote(
-                selectedQuote.text
-            );
-        }
-
-        updateTimeAndDate();
-        setRandomQuote();
-        setInterval(updateTimeAndDate, 1000);
-        setInterval(setRandomQuote, 60000);
-    </script>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        const videoBg = document.getElementById("video-bg");
-        const dateMonth = document.getElementById("date-month");
-        const dateDay = document.getElementById("date-day");
-        const dateYear = document.getElementById("date-year");
-        const hoursSpan = document.getElementById("time-hours");
-        const minutesSpan = document.getElementById("time-minutes");
-        const secondsSpan = document.getElementById("time-seconds");
-
-        let audioPlayer;
-        let visualPlayer;
-
-        let isAudioPlaying = false;
-        let activeVisualKey = null;
-        let currentAudioTrack = null;
-
-        const VISUAL_VIDEOS = {
-            hours: "DEWzT1geuPU",
-            minutes: "3u0wlqe8lVk",
-            seconds: "zhDwjnYZiCo",
-        };
-
-        const AUDIO_TRACKS = {
-            month: "eTeD8DAta4c",
-            day: "QHIyFIMu4uQ",
-            year: "qe3l1rvJMlA"
-        };
-
-        function onYouTubeIframeAPIReady() {
-            audioPlayer = new YT.Player("yt-audio", {
-                height: "0",
-                width: "0",
-                videoId: "eTeD8DAta4c",
-                playerVars: {
-                    autoplay: 0,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
-                    modestbranding: 1,
-                    rel: 0,
-                    loop: 1,
-                    playlist: "eTeD8DAta4c",
-                    noplaylist: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.href,
-                    playsinline: 1,
-                    enablejsapi: 1
-                },
-                events: {
-                    onStateChange: (e) => {
-                        if (e.data === YT.PlayerState.PLAYING) {
-                            audioPlayer.setPlaybackQuality("tiny");
-                        }
-                    },
-                },
-            });
-
-            visualPlayer = new YT.Player("yt-player-hours", {
-                height: "100%",
-                width: "100%",
-                videoId: VISUAL_VIDEOS.hours,
-                playerVars: {
-                    autoplay: 0,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
-                    modestbranding: 1,
-                    rel: 0,
-                    loop: 1,
-                    playlist: VISUAL_VIDEOS.hours,
-                    noplaylist: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.href,
-                    playsinline: 1,
-                    enablejsapi: 1
-                },
-                events: {
-                    onStateChange: (e) => {
-                        if (e.data === YT.PlayerState.PLAYING) {
-                            visualPlayer.setPlaybackQuality("hd1080");
-                        }
-                    },
-                },
-            });
-
-            document.getElementById("yt-player-minutes").style.display = "none";
-            document.getElementById("yt-player-seconds").style.display = "none";
-        }
-
-        function toggleAudio(trackId) {
-            if (!audioPlayer) return;
-
-            if (currentAudioTrack !== trackId) {
-                audioPlayer.loadVideoById(trackId);
-                currentAudioTrack = trackId;
-                audioPlayer.playVideo();
-                isAudioPlaying = true;
-            } else if (!isAudioPlaying) {
-                audioPlayer.playVideo();
-                isAudioPlaying = true;
-            } else {
-                audioPlayer.pauseVideo();
-                isAudioPlaying = false;
-            }
-        }
-
-        dateMonth.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.month));
-        dateDay.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.day));
-        dateYear.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.year));
-
-        function toggleVisual(key) {
-            if (!visualPlayer) return;
-
-            if (activeVisualKey === key) {
-                visualPlayer.pauseVideo();
-                activeVisualKey = null;
-                videoBg.style.opacity = "0";
-                document.body.style.background =
-                    '#000000 url("image.jpg") center center / cover no-repeat fixed';
-            } else {
-                const id = VISUAL_VIDEOS[key];
-                visualPlayer.loadVideoById({
-                    videoId: id,
-                    startSeconds: 0,
-                });
-                visualPlayer.setLoop && visualPlayer.setLoop(true);
-                videoBg.style.opacity = "1";
-                document.body.style.backgroundImage = "none";
-                activeVisualKey = key;
-            }
-        }
-
-        hoursSpan.addEventListener("click", () => toggleVisual("hours"));
-        minutesSpan.addEventListener("click", () => toggleVisual("minutes"));
-        secondsSpan.addEventListener("click", () => toggleVisual("seconds"));
-    </script>
 
     <style>
         body {
@@ -372,6 +119,265 @@
             margin-top: 10px;
         }
     </style>
-</body>
+</head>
 
+<body>
+    <div class="video-bg" id="video-bg">
+        <div id="yt-audio"></div>
+        <div id="yt-player-hours"></div>
+        <div id="yt-player-minutes"></div>
+        <div id="yt-player-seconds"></div>
+    </div>
+
+    <div class="widget">
+        <div class="day" id="day">Friday</div>
+        <div class="date" id="date"><span id="date-month"></span> <span id="date-day"></span>, <span id="date-year"></span></div>
+
+        <div class="time" id="time">
+            <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
+        </div>
+
+        <div class="quote-container">
+            <div class="quote" id="quote">Every moment is a fresh beginning.</div>
+            <div class="author" id="author"></div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
+            { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+            { text: "The best preparation for tomorrow is doing your best today.", author: "H. Jackson Brown Jr." },
+            { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" },
+            { text: "Action is the foundational key to all success.", author: "Pablo Picasso" },
+            { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" }
+        ];
+
+        function updateTimeAndDate() {
+            const currentDate = new Date();
+            const hours = String(currentDate.getHours()).padStart(2, "0");
+            const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+            const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+
+            const options = { weekday: "long", month: "long", day: "numeric", year: "numeric" };
+            const fullDate = currentDate.toLocaleDateString("en-US", options);
+            const [weekday, monthDay, year] = fullDate.split(", ");
+            const [month, day] = monthDay.split(" ");
+
+            document.getElementById("day").textContent = weekday;
+            document.getElementById("date-month").textContent = month;
+            document.getElementById("date-day").textContent = day;
+            document.getElementById("date-year").textContent = year;
+
+            document.getElementById("time-hours").textContent = hours;
+            document.getElementById("time-minutes").textContent = minutes;
+            document.getElementById("time-seconds").textContent = seconds;
+        }
+
+        function formatQuote(text) {
+            return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
+        }
+
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selectedQuote = quotes[randomIndex];
+            document.getElementById("quote").innerHTML = formatQuote(selectedQuote.text);
+        }
+
+        updateTimeAndDate();
+        setRandomQuote();
+        setInterval(updateTimeAndDate, 1000);
+        setInterval(setRandomQuote, 60000);
+    </script>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const videoBg = document.getElementById("video-bg");
+        const dateMonth = document.getElementById("date-month");
+        const dateDay = document.getElementById("date-day");
+        const dateYear = document.getElementById("date-year");
+        const hoursSpan = document.getElementById("time-hours");
+        const minutesSpan = document.getElementById("time-minutes");
+        const secondsSpan = document.getElementById("time-seconds");
+
+        let audioPlayer;
+        let visualPlayer;
+
+        let currentAudioTrack = null;
+        let isAudioPlaying = false;
+        const audioTime = Object.create(null);
+
+        let currentVisualKey = null;
+        let isVisualPlaying = false;
+        const visualTime = Object.create(null);
+
+        const VISUAL_VIDEOS = {
+            hours: "DEWzT1geuPU",
+            minutes: "3u0wlqe8lVk",
+            seconds: "zhDwjnYZiCo",
+        };
+
+        const AUDIO_TRACKS = {
+            month: "eTeD8DAta4c",
+            day: "QHIyFIMu4uQ",
+            year: "qe3l1rvJMlA"
+        };
+
+        function onYouTubeIframeAPIReady() {
+            audioPlayer = new YT.Player("yt-audio", {
+                height: "0",
+                width: "0",
+                videoId: AUDIO_TRACKS.month,
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    loop: 0,
+                    noplaylist: 1,
+                    origin: window.location.origin,
+                    widget_referrer: window.location.href,
+                    playsinline: 1,
+                    enablejsapi: 1
+                },
+                events: {
+                    onStateChange: (e) => {
+                        if (e.data === YT.PlayerState.PLAYING) {
+                            audioPlayer.setPlaybackQuality("tiny");
+                            isAudioPlaying = true;
+                        } else if (e.data === YT.PlayerState.PAUSED) {
+                            isAudioPlaying = false;
+                        }
+                    }
+                }
+            });
+
+            visualPlayer = new YT.Player("yt-player-hours", {
+                height: "100%",
+                width: "100%",
+                videoId: VISUAL_VIDEOS.hours,
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    loop: 1,
+                    playlist: VISUAL_VIDEOS.hours,
+                    noplaylist: 1,
+                    origin: window.location.origin,
+                    widget_referrer: window.location.href,
+                    playsinline: 1,
+                    enablejsapi: 1
+                },
+                events: {
+                    onStateChange: (e) => {
+                        if (e.data === YT.PlayerState.PLAYING) {
+                            visualPlayer.setPlaybackQuality("hd1080");
+                            isVisualPlaying = true;
+                        } else if (e.data === YT.PlayerState.PAUSED) {
+                            isVisualPlaying = false;
+                        }
+                    }
+                }
+            });
+
+            document.getElementById("yt-player-minutes").style.display = "none";
+            document.getElementById("yt-player-seconds").style.display = "none";
+        }
+
+        function safeNow(player) {
+            try {
+                const t = player.getCurrentTime();
+                return Number.isFinite(t) ? t : 0;
+            } catch (_) {
+                return 0;
+            }
+        }
+
+        function toggleAudio(trackId) {
+            if (!audioPlayer) return;
+
+            if (currentAudioTrack !== trackId) {
+                if (currentAudioTrack) {
+                    audioTime[currentAudioTrack] = safeNow(audioPlayer);
+                }
+                currentAudioTrack = trackId;
+                const start = audioTime[trackId] || 0;
+                audioPlayer.loadVideoById({ videoId: trackId, startSeconds: start });
+                isAudioPlaying = true;
+                return;
+            }
+
+            if (isAudioPlaying) {
+                audioTime[trackId] = safeNow(audioPlayer);
+                audioPlayer.pauseVideo();
+                isAudioPlaying = false;
+                return;
+            }
+
+            const resumeAt = audioTime[trackId] || safeNow(audioPlayer) || 0;
+            audioPlayer.playVideo();
+            if (resumeAt > 0) audioPlayer.seekTo(resumeAt, true);
+            isAudioPlaying = true;
+        }
+
+        function showVideoBg() {
+            videoBg.style.opacity = "1";
+            document.body.style.backgroundImage = "none";
+        }
+
+        function hideVideoBg() {
+            videoBg.style.opacity = "0";
+            document.body.style.background = '#000000 url("image.jpg") center center / cover no-repeat fixed';
+        }
+
+        function toggleVisual(key) {
+            if (!visualPlayer) return;
+
+            const id = VISUAL_VIDEOS[key];
+
+            if (currentVisualKey !== key) {
+                if (currentVisualKey) {
+                    visualTime[currentVisualKey] = safeNow(visualPlayer);
+                }
+                currentVisualKey = key;
+                const start = visualTime[key] || 0;
+                showVideoBg();
+                visualPlayer.loadVideoById({ videoId: id, startSeconds: start });
+                isVisualPlaying = true;
+                return;
+            }
+
+            if (isVisualPlaying) {
+                visualTime[key] = safeNow(visualPlayer);
+                visualPlayer.pauseVideo();
+                isVisualPlaying = false;
+                hideVideoBg();
+                return;
+            }
+
+            const resumeAt = visualTime[key] || safeNow(visualPlayer) || 0;
+            showVideoBg();
+            visualPlayer.playVideo();
+            if (resumeAt > 0) visualPlayer.seekTo(resumeAt, true);
+            isVisualPlaying = true;
+        }
+
+        dateMonth.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.month));
+        dateDay.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.day));
+        dateYear.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.year));
+
+        hoursSpan.addEventListener("click", () => toggleVisual("hours"));
+        minutesSpan.addEventListener("click", () => toggleVisual("minutes"));
+        secondsSpan.addEventListener("click", () => toggleVisual("seconds"));
+    </script>
+</body>
 </html>
