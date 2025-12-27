@@ -15,10 +15,7 @@
             margin: 0;
             padding: 0;
             font-family: "Space Grotesk", sans-serif;
-            background-image: url("image.jpg");
-            background-size: cover;
-            background-position: center;
-            background-color: #000000;
+            background: #000000 url("image.jpg") center center / cover no-repeat fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -250,12 +247,10 @@
                 ytPlayer.playVideo();
                 isPlaying = true;
                 videoBg.style.opacity = "1";
-                document.body.style.backgroundImage = "none";
             } else {
                 ytPlayer.pauseVideo();
                 isPlaying = false;
                 videoBg.style.opacity = "0";
-                document.body.style.backgroundImage = 'url("image.jpg")';
             }
         });
     </script>
