@@ -251,6 +251,7 @@
 
         let isAudioPlaying = false;
         let activeVisualKey = null;
+        let currentAudioTrack = null;
 
         const VISUAL_VIDEOS = {
             hours: "DEWzT1geuPU",
@@ -315,47 +316,28 @@
             document.getElementById("yt-player-seconds").style.display = "none";
         }
 
-        dateMonth.addEventListener("click", () => {
+        function toggleAudio(trackId) {
             if (!audioPlayer) return;
 
-            audioPlayer.loadVideoById(AUDIO_TRACKS.month);
-            
-            if (!isAudioPlaying) {
+            if (currentAudioTrack !== trackId) {
+                audioPlayer.loadVideoById(trackId);
+                currentAudioTrack = trackId;
+                audioPlayer.playVideo();
+                isAudioPlaying = true;
+            } else if (!isAudioPlaying) {
                 audioPlayer.playVideo();
                 isAudioPlaying = true;
             } else {
                 audioPlayer.pauseVideo();
                 isAudioPlaying = false;
             }
-        });
+        }
 
-        dateDay.addEventListener("click", () => {
-            if (!audioPlayer) return;
+        dateMonth.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.month));
 
-            audioPlayer.loadVideoById(AUDIO_TRACKS.day);
-            
-            if (!isAudioPlaying) {
-                audioPlayer.playVideo();
-                isAudioPlaying = true;
-            } else {
-                audioPlayer.pauseVideo();
-                isAudioPlaying = false;
-            }
-        });
+        dateDay.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.day));
 
-        dateYear.addEventListener("click", () => {
-            if (!audioPlayer) return;
-
-            audioPlayer.loadVideoById(AUDIO_TRACKS.year);
-            
-            if (!isAudioPlaying) {
-                audioPlayer.playVideo();
-                isAudioPlaying = true;
-            } else {
-                audioPlayer.pauseVideo();
-                isAudioPlaying = false;
-            }
-        });
+        dateYear.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.year));
 
         function toggleVisual(key) {
             if (!visualPlayer) return;
@@ -366,18 +348,17 @@
                 videoBg.style.opacity = "0";
                 document.body.style.background =
                     '#000000 url("image.jpg") center center / cover no-repeat fixed';
-                return;
+            } else {
+                const id = VISUAL_VIDEOS[key];
+                visualPlayer.loadVideoById({
+                    videoId: id,
+                    startSeconds: 0,
+                });
+                visualPlayer.setLoop && visualPlayer.setLoop(true);
+                videoBg.style.opacity = "1";
+                document.body.style.backgroundImage = "none";
+                activeVisualKey = key;
             }
-
-            const id = VISUAL_VIDEOS[key];
-            visualPlayer.loadVideoById({
-                videoId: id,
-                startSeconds: 0,
-            });
-            visualPlayer.setLoop && visualPlayer.setLoop(true);
-            videoBg.style.opacity = "1";
-            document.body.style.backgroundImage = "none";
-            activeVisualKey = key;
         }
 
         hoursSpan.addEventListener("click", () => toggleVisual("hours"));
