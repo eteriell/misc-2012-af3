@@ -95,6 +95,7 @@
             border-radius: 1px;
             background: rgba(0, 0, 0, 0.3);
             color: #b0c4de;
+            cursor: pointer;
         }
 
         .quote {
@@ -131,7 +132,7 @@
             <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
         </div>
 
-        <div class="quote-container">
+        <div class="quote-container" id="quote-container">
             <div class="quote" id="quote">
                 Every moment is a fresh beginning.
             </div>
@@ -227,13 +228,13 @@
     </script>
 
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         const dayElement = document.getElementById("day");
         const videoBg = document.getElementById("video-bg");
         const hoursSpan = document.getElementById("time-hours");
         const minutesSpan = document.getElementById("time-minutes");
         const secondsSpan = document.getElementById("time-seconds");
+        const quoteContainer = document.getElementById("quote-container");
 
         let audioPlayer;
         let visualPlayer;
@@ -247,6 +248,41 @@
             seconds: "zhDwjnYZiCo",
         };
 
+        // PELIGROSA Shuffle (72 трека)
+        const tracks = [
+            "euoOOSdxGPo","EIiL37oRFfI","UWn9RdueB7E","vX1fgqKXSsk","Sk_opHAKMsk","Po8bFkRFBpk",
+            "5r5UePOgMQU","xHgKJuNrMRc","aDO2S8oLQ9k","NynGMXKfrxw","QaXhVryxVBk","3Y5mK5bpIiQ",
+            "C9fpEKHe7Hk","kEG4Q5wRHEg","g7-n7_OtT7s","9-JyUbzrZbA","BM5Hv8qGDBo","b719yBVKlCk",
+            "pMDVM70H83U","zkqfSHb1A_k","6EtBpwTqL6o","mPBlzDS0cUg","YlhALOk0_Dk","JD6UnFrcK1g",
+            "e1nFnVoLEnQ","hWbKLIH3N8c","yyG4nWhe1YI","Bx4x-NPrVHY","qAWhiZ97DjY","WFoMObvIQXk",
+            "lTK-9-I_fRM","j-UZMyi6YHA","Vs6LGblT1iE","edkeghSIm5Q","peUjZ3n18Uk","9C5JPrN5xQY",
+            "5yPZpSfy9mo","Fsr-Uk2IU5I","PrpU5mGsWl8","5yT5X-qZGrE","K0vXF7lJcWY","2x9aY0QJR04",
+            "2yy36dsAUXQ","1fdnbX6RmjA","v51epyc70k0","-JMUMyBRgug","ntynhCyzAso","pEVIfEOFFIo",
+            "wbmz0_NUQX0","yO-XR4qXm1k","yCkLC9vQ_Fg","3WnZFsBWj8U","k2tX27pq0bA","tupl2hiXbcE",
+            "PvZ0ZyqCX8I","suSKre0wZkA","juRFjpB5Ppg","WoTDgfzrsDw","laC8P66yamE","K4liU7EzrSo",
+            "bxdH9ecHHgg","F3JJ-ti-4ug","FDDV8ySzKCY","JAoRai-KPN0","8E5_HHQTTao","aTcpp8La4T0",
+            "dbmNWN_dEkI","Tgi4K-9JUdo","T0i3blhrVdo","4ejzzT8_AE0","3n0SzYTXhJI","NN3psqPTSZY",
+            "Mkau25BynWQ","vftKOnbW154","GKIaDFwt4WQ","w72uL2Kj41M"
+        ];
+
+        let currentShuffleIndex = -1;
+
+        function playShuffleTrack() {
+            if (!audioPlayer) return;
+            
+            const nextIndex = Math.floor(Math.random() * tracks.length);
+            if (nextIndex === currentShuffleIndex) return playShuffleTrack();
+            
+            currentShuffleIndex = nextIndex;
+            const videoId = tracks[nextIndex];
+            
+            audioPlayer.loadVideoById({
+                videoId: videoId,
+                startSeconds: 0
+            });
+            audioPlayer.playVideo();
+        }
+
         function onYouTubeIframeAPIReady() {
             audioPlayer = new YT.Player("yt-audio", {
                 height: "0",
@@ -259,8 +295,7 @@
                     fs: 0,
                     modestbranding: 1,
                     rel: 0,
-                    loop: 1,
-                    playlist: "eTeD8DAta4c",
+                    loop: 0,
                 },
                 events: {
                     onStateChange: (e) => {
@@ -309,6 +344,8 @@
                 isAudioPlaying = false;
             }
         });
+
+        quoteContainer.addEventListener("click", playShuffleTrack);
 
         function toggleVisual(key) {
             if (!visualPlayer) return;
