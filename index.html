@@ -119,6 +119,7 @@
 
 <body>
   <div class="video-bg" id="video-bg">
+    <div id="yt-audio"></div>
     <div id="yt-player-hours"></div>
     <div id="yt-player-minutes"></div>
     <div id="yt-player-seconds"></div>
@@ -189,7 +190,6 @@
       const hours = String(currentDate.getHours()).padStart(2, "0");
       const minutes = String(currentDate.getMinutes()).padStart(2, "0");
       const seconds = String(currentDate.getSeconds()).padStart(2, "0");
-      const time = `${hours}:${minutes}:${seconds}`;
 
       const options = {
         weekday: "long",
@@ -245,10 +245,10 @@
     let activeVisual = null;
 
     function onYouTubeIframeAPIReady() {
-      audioPlayer = new YT.Player(document.createElement("div"), {
+      audioPlayer = new YT.Player("yt-audio", {
         height: "0",
         width: "0",
-        videoId: "eTeD8DAta4c", // сюда ID видео для фонового звука
+        videoId: "eTeD8DAta4c",
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -268,14 +268,10 @@
         },
       });
 
-      document.getElementById("yt-player-hours").innerHTML = "";
-      document.getElementById("yt-player-minutes").innerHTML = "";
-      document.getElementById("yt-player-seconds").innerHTML = "";
-
       hoursPlayer = new YT.Player("yt-player-hours", {
         height: "100%",
         width: "100%",
-        videoId: "DEWzT1geuPU", // сюда ID видео для часов
+        videoId: "DEWzT1geuPU",
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -298,7 +294,7 @@
       minutesPlayer = new YT.Player("yt-player-minutes", {
         height: "100%",
         width: "100%",
-        videoId: "3u0wlqe8lVk&t", // сюда ID видео для минут
+        videoId: "3u0wlqe8lVk",
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -321,7 +317,7 @@
       secondsPlayer = new YT.Player("yt-player-seconds", {
         height: "100%",
         width: "100%",
-        videoId: "vyg5jJrZ42s", // сюда ID видео для секунд
+        videoId: "vyg5jJrZ42s",
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -365,7 +361,8 @@
         target.pauseVideo();
         activeVisual = null;
         videoBg.style.opacity = "0";
-        document.body.style.background = '#000000 url("image.jpg") center center / cover no-repeat fixed';
+        document.body.style.background =
+          '#000000 url("image.jpg") center center / cover no-repeat fixed';
       } else {
         target.playVideo();
         activeVisual = target;
