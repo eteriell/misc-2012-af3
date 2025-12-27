@@ -1,379 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aesthetic Time Widget</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aesthetic Time Widget</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
-    rel="stylesheet"
-  />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Space Grotesk", sans-serif;
-      background: #000000 url("image.jpg") center center / cover no-repeat fixed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
-      color: black;
-      position: relative;
-      overflow: hidden;
-    }
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Space Grotesk", sans-serif;
+            background: #000000 url("image.jpg") center center / cover no-repeat fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            color: black;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .video-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
 
-    .video-bg iframe {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120vw;
-      height: 120vh;
-      transform: translate(-50%, -50%);
-    }
+        .video-bg iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120vw;
+            height: 120vh;
+            transform: translate(-50%, -50%);
+        }
 
-    .widget {
-      text-align: center;
-      padding: 30px;
-      width: 380px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 1px;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(0, 0, 0, 0.2);
-    }
+        .widget {
+            text-align: center;
+            padding: 30px;
+            width: 380px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
 
-    .day {
-      font-size: 28px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 5px;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-    }
+        .day {
+            font-size: 28px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
 
-    .date {
-      font-size: 16px;
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      color: #f8f8ff;
-    }
+        .date {
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #f8f8ff;
+        }
 
-    .time {
-      font-size: 56px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      cursor: default;
-    }
+        .time {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            cursor: default;
+        }
 
-    .time span {
-      display: inline-block;
-      cursor: pointer;
-    }
+        .time span {
+            display: inline-block;
+            cursor: pointer;
+        }
 
-    .quote-container {
-      margin-top: 5px;
-      padding: 5px;
-      border-radius: 1px;
-      background: rgba(0, 0, 0, 0.3);
-      color: #b0c4de;
-    }
+        .quote-container {
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 1px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #b0c4de;
+        }
 
-    .quote {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 18px;
-      font-style: italic;
-      line-height: 1.5;
-      margin-bottom: 5px;
-    }
+        .quote {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
 
-    .author {
-      font-family: "Consolas", monospace;
-      font-size: 14px;
-      text-align: right;
-      color: #ffffff;
-      margin-top: 10px;
-    }
-  </style>
+        .author {
+            font-family: "Consolas", monospace;
+            font-size: 14px;
+            text-align: right;
+            color: #ffffff;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="video-bg" id="video-bg">
-    <div id="yt-audio"></div>
-    <div id="yt-player-hours"></div>
-    <div id="yt-player-minutes"></div>
-    <div id="yt-player-seconds"></div>
-  </div>
-
-  <div class="widget">
-    <div class="day" id="day">Friday</div>
-    <div class="date" id="date">December 26, 2025</div>
-
-    <div class="time" id="time">
-      <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
+    <div class="video-bg" id="video-bg">
+        <div id="yt-audio"></div>
+        <div id="yt-player-hours"></div>
+        <div id="yt-player-minutes"></div>
+        <div id="yt-player-seconds"></div>
     </div>
 
-    <div class="quote-container">
-      <div class="quote" id="quote">
-        Every moment is a fresh beginning.
-      </div>
-      <div class="author" id="author"></div>
+    <div class="widget">
+        <div class="day" id="day">Friday</div>
+        <div class="date" id="date">December 26, 2025</div>
+
+        <div class="time" id="time">
+            <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
+        </div>
+
+        <div class="quote-container">
+            <div class="quote" id="quote">
+                Every moment is a fresh beginning.
+            </div>
+            <div class="author" id="author"></div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    const quotes = [
-      {
-        text: "The future belongs to those who believe in the beauty of their dreams.",
-        author: "Eleanor Roosevelt",
-      },
-      {
-        text: "Strive not to be a success, but rather to be of value.",
-        author: "Albert Einstein",
-      },
-      {
-        text: "Every moment is a fresh beginning.",
-        author: "T.S. Eliot",
-      },
-      {
-        text: "Believe you can and you're halfway there.",
-        author: "Theodore Roosevelt",
-      },
-      {
-        text: "The only way to do great work is to love what you do.",
-        author: "Steve Jobs",
-      },
-      {
-        text: "The best way to predict the future is to create it.",
-        author: "Peter Drucker",
-      },
-      {
-        text: "The best preparation for tomorrow is doing your best today.",
-        author: "H. Jackson Brown Jr.",
-      },
-      {
-        text: "The only limit to our realization of tomorrow will be our doubts of today.",
-        author: "Franklin D. Roosevelt",
-      },
-      {
-        text: "Action is the foundational key to all success.",
-        author: "Pablo Picasso",
-      },
-      {
-        text: "Discipline is the bridge between goals and accomplishment.",
-        author: "Jim Rohn",
-      },
-    ];
+    <script>
+        const quotes = [
+            {
+                text: "The future belongs to those who believe in the beauty of their dreams.",
+                author: "Eleanor Roosevelt",
+            },
+            {
+                text: "Strive not to be a success, but rather to be of value.",
+                author: "Albert Einstein",
+            },
+            {
+                text: "Every moment is a fresh beginning.",
+                author: "T.S. Eliot",
+            },
+            {
+                text: "Believe you can and you're halfway there.",
+                author: "Theodore Roosevelt",
+            },
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs",
+            },
+            {
+                text: "The best way to predict the future is to create it.",
+                author: "Peter Drucker",
+            },
+            {
+                text: "The best preparation for tomorrow is doing your best today.",
+                author: "H. Jackson Brown Jr.",
+            },
+            {
+                text: "The only limit to our realization of tomorrow will be our doubts of today.",
+                author: "Franklin D. Roosevelt",
+            },
+            {
+                text: "Action is the foundational key to all success.",
+                author: "Pablo Picasso",
+            },
+            {
+                text: "Discipline is the bridge between goals and accomplishment.",
+                author: "Jim Rohn",
+            },
+        ];
 
-    function updateTimeAndDate() {
-      const currentDate = new Date();
-      const hours = String(currentDate.getHours()).padStart(2, "0");
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-      const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+        function updateTimeAndDate() {
+            const currentDate = new Date();
+            const hours = String(currentDate.getHours()).padStart(2, "0");
+            const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+            const seconds = String(currentDate.getSeconds()).padStart(2, "0");
 
-      const options = {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      };
+            const options = {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+            };
 
-      const fullDate = currentDate.toLocaleDateString("en-US", options);
-      const [weekday, ...rest] = fullDate.split(", ");
+            const fullDate = currentDate.toLocaleDateString("en-US", options);
+            const [weekday, ...rest] = fullDate.split(", ");
 
-      document.getElementById("day").textContent = weekday;
-      document.getElementById("date").textContent = rest.join(", ");
+            document.getElementById("day").textContent = weekday;
+            document.getElementById("date").textContent = rest.join(", ");
 
-      document.getElementById("time-hours").textContent = hours;
-      document.getElementById("time-minutes").textContent = minutes;
-      document.getElementById("time-seconds").textContent = seconds;
-    }
+            document.getElementById("time-hours").textContent = hours;
+            document.getElementById("time-minutes").textContent = minutes;
+            document.getElementById("time-seconds").textContent = seconds;
+        }
 
-    function formatQuote(text) {
-      return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
-    }
+        function formatQuote(text) {
+            return text.replace(/,\s+/g, ",<br>").replace(/\s+and\s+/g, "<br>and ");
+        }
 
-    function setRandomQuote() {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      const selectedQuote = quotes[randomIndex];
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selectedQuote = quotes[randomIndex];
 
-      document.getElementById("quote").innerHTML = formatQuote(
-        selectedQuote.text
-      );
-    }
+            document.getElementById("quote").innerHTML = formatQuote(
+                selectedQuote.text
+            );
+        }
 
-    updateTimeAndDate();
-    setRandomQuote();
-    setInterval(updateTimeAndDate, 1000);
-    setInterval(setRandomQuote, 60000);
-  </script>
+        updateTimeAndDate();
+        setRandomQuote();
+        setInterval(updateTimeAndDate, 1000);
+        setInterval(setRandomQuote, 60000);
+    </script>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    const dayElement = document.getElementById("day");
-    const videoBg = document.getElementById("video-bg");
-    const hoursSpan = document.getElementById("time-hours");
-    const minutesSpan = document.getElementById("time-minutes");
-    const secondsSpan = document.getElementById("time-seconds");
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const dayElement = document.getElementById("day");
+        const videoBg = document.getElementById("video-bg");
+        const hoursSpan = document.getElementById("time-hours");
+        const minutesSpan = document.getElementById("time-minutes");
+        const secondsSpan = document.getElementById("time-seconds");
 
-    let audioPlayer;
-    let hoursPlayer;
-    let minutesPlayer;
-    let secondsPlayer;
+        let audioPlayer;
+        let visualPlayer;
 
-    let isAudioPlaying = false;
-    let activeVisual = null;
+        let isAudioPlaying = false;
+        let activeVisualKey = null;
 
-    function onYouTubeIframeAPIReady() {
-      audioPlayer = new YT.Player("yt-audio", {
-        height: "0",
-        width: "0",
-        videoId: "eTeD8DAta4c",
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          loop: 1,
-          playlist: "eTeD8DAta4c",
-        },
-        events: {
-          onStateChange: (e) => {
-            if (e.data === YT.PlayerState.PLAYING) {
-              audioPlayer.setPlaybackQuality("small");
+        const VISUAL_VIDEOS = {
+            hours: "DEWzT1geuPU",
+            minutes: "3u0wlqe8lVk",
+            seconds: "vyg5jJrZ42s",
+        };
+
+        function onYouTubeIframeAPIReady() {
+            audioPlayer = new YT.Player("yt-audio", {
+                height: "0",
+                width: "0",
+                videoId: "eTeD8DAta4c",
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    loop: 1,
+                    playlist: "eTeD8DAta4c",
+                },
+                events: {
+                    onStateChange: (e) => {
+                        if (e.data === YT.PlayerState.PLAYING) {
+                            audioPlayer.setPlaybackQuality("small");
+                        }
+                    },
+                },
+            });
+
+            visualPlayer = new YT.Player("yt-player-hours", {
+                height: "100%",
+                width: "100%",
+                videoId: VISUAL_VIDEOS.hours,
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    loop: 1,
+                    playlist: VISUAL_VIDEOS.hours,
+                },
+                events: {
+                    onStateChange: (e) => {
+                        if (e.data === YT.PlayerState.PLAYING) {
+                            visualPlayer.setPlaybackQuality("hd1080");
+                        }
+                    },
+                },
+            });
+
+            // остальные контейнеры нам теперь не нужны как отдельные плееры
+            document.getElementById("yt-player-minutes").style.display = "none";
+            document.getElementById("yt-player-seconds").style.display = "none";
+        }
+
+        dayElement.addEventListener("click", () => {
+            if (!audioPlayer) return;
+
+            if (!isAudioPlaying) {
+                audioPlayer.playVideo();
+                isAudioPlaying = true;
+            } else {
+                audioPlayer.pauseVideo();
+                isAudioPlaying = false;
             }
-          },
-        },
-      });
+        });
 
-      hoursPlayer = new YT.Player("yt-player-hours", {
-        height: "100%",
-        width: "100%",
-        videoId: "DEWzT1geuPU",
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          loop: 1,
-          playlist: "DEWzT1geuPU",
-        },
-        events: {
-          onStateChange: (e) => {
-            if (e.data === YT.PlayerState.PLAYING) {
-              hoursPlayer.setPlaybackQuality("hd1080");
+        function toggleVisual(key) {
+            if (!visualPlayer) return;
+
+            if (activeVisualKey === key) {
+                visualPlayer.pauseVideo();
+                activeVisualKey = null;
+                videoBg.style.opacity = "0";
+                document.body.style.background =
+                    '#000000 url("image.jpg") center center / cover no-repeat fixed';
+                return;
             }
-          },
-        },
-      });
 
-      minutesPlayer = new YT.Player("yt-player-minutes", {
-        height: "100%",
-        width: "100%",
-        videoId: "3u0wlqe8lVk",
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          loop: 1,
-          playlist: "3u0wlqe8lVk",
-        },
-        events: {
-          onStateChange: (e) => {
-            if (e.data === YT.PlayerState.PLAYING) {
-              minutesPlayer.setPlaybackQuality("hd1080");
-            }
-          },
-        },
-      });
+            const id = VISUAL_VIDEOS[key];
+            visualPlayer.loadVideoById({
+                videoId: id,
+                startSeconds: 0,
+            });
+            visualPlayer.setLoop && visualPlayer.setLoop(true);
+            videoBg.style.opacity = "1";
+            document.body.style.backgroundImage = "none";
+            activeVisualKey = key;
+        }
 
-      secondsPlayer = new YT.Player("yt-player-seconds", {
-        height: "100%",
-        width: "100%",
-        videoId: "vyg5jJrZ42s",
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          loop: 1,
-          playlist: "vyg5jJrZ42s",
-        },
-        events: {
-          onStateChange: (e) => {
-            if (e.data === YT.PlayerState.PLAYING) {
-              secondsPlayer.setPlaybackQuality("hd1080");
-            }
-          },
-        },
-      });
-    }
-
-    dayElement.addEventListener("click", () => {
-      if (!audioPlayer) return;
-
-      if (!isAudioPlaying) {
-        audioPlayer.playVideo();
-        isAudioPlaying = true;
-      } else {
-        audioPlayer.pauseVideo();
-        isAudioPlaying = false;
-      }
-    });
-
-    function toggleVisual(target) {
-      if (!hoursPlayer || !minutesPlayer || !secondsPlayer) return;
-
-      if (activeVisual && activeVisual !== target) {
-        activeVisual.pauseVideo();
-      }
-
-      if (activeVisual === target) {
-        target.pauseVideo();
-        activeVisual = null;
-        videoBg.style.opacity = "0";
-        document.body.style.background =
-          '#000000 url("image.jpg") center center / cover no-repeat fixed';
-      } else {
-        target.playVideo();
-        activeVisual = target;
-        videoBg.style.opacity = "1";
-        document.body.style.backgroundImage = "none";
-      }
-    }
-
-    hoursSpan.addEventListener("click", () => toggleVisual(hoursPlayer));
-    minutesSpan.addEventListener("click", () => toggleVisual(minutesPlayer));
-    secondsSpan.addEventListener("click", () => toggleVisual(secondsPlayer));
-  </script>
+        hoursSpan.addEventListener("click", () => toggleVisual("hours"));
+        minutesSpan.addEventListener("click", () => toggleVisual("minutes"));
+        secondsSpan.addEventListener("click", () => toggleVisual("seconds"));
+    </script>
 </body>
+
 </html>
