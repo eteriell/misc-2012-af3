@@ -24,7 +24,6 @@
             color: black;
             position: relative;
             overflow: hidden;
-            /* Запрет выделения текста для красоты */
             user-select: none;
             -webkit-user-select: none;
         }
@@ -41,7 +40,6 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            /* Компенсация глитча по краям */
             width: 102vw;
             height: 102vh;
             object-fit: cover;
@@ -97,7 +95,7 @@
             cursor: default;
         }
 
-        /* Индикация, что можно кликнуть */
+        
         .time span {
             display: inline-block;
             cursor: pointer;
@@ -105,20 +103,19 @@
         }
         
         .time span:hover {
-            color: #b0c4de;
+            color: #A4D4AE; 
         }
         
-        /* Эффект нажатия */
-        .time span:active {
-            transform: scale(0.95);
-        }
-
         .quote-container {
             margin-top: 5px;
             padding: 5px;
             border-radius: 1px;
             background: rgba(0, 0, 0, 0.3);
-            color: #b0c4de;
+            color: #A4D4AE; 
+        }
+
+        .time span:active {
+            transform: scale(0.95);
         }
 
         .quote {
@@ -157,7 +154,6 @@
     </div>
 
     <script>
-        // --- 1. ЛОГИКА ВРЕМЕНИ И ЦИТАТ ---
         
         const quotes = [
             "The future belongs to those who believe in the beauty of their dreams.",
@@ -208,7 +204,6 @@
         setInterval(updateTimeAndDate, 1000);
         setInterval(setRandomQuote, 60000);
 
-        // --- 2. ЛОГИКА ВИДЕО (OPTIMIZED) ---
 
         const videos = {
             hours: document.getElementById('vid-hours'),
@@ -222,29 +217,23 @@
             const video = videos[key];
             if (!video) return;
 
-            // Если кликнули на то же самое видео
             if (activeVideoKey === key) {
                 if (video.paused) {
-                    // Браузер подгрузит остаток лупа только сейчас
                     video.play();
                     video.classList.add('active');
                 } else {
-                    // Пауза мгновенно останавливает декодирование
                     video.pause();
                     video.classList.remove('active');
                 }
             } 
-            // Если кликнули на другое
             else {
-                // Ставим на паузу старое (экономим CPU и память)
                 if (activeVideoKey && videos[activeVideoKey]) {
                     videos[activeVideoKey].pause();
                     videos[activeVideoKey].classList.remove('active');
                 }
                 
-                // Запускаем новое
                 activeVideoKey = key;
-                video.play(); // Если видео еще не скачано, оно начнет качаться тут
+                video.play();
                 video.classList.add('active');
             }
         }
