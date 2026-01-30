@@ -24,6 +24,9 @@
             color: black;
             position: relative;
             overflow: hidden;
+            /* Запрет выделения текста для красоты */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .video-container {
@@ -38,13 +41,15 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover; 
+            /* Компенсация глитча по краям */
+            width: 102vw;
+            height: 102vh;
+            object-fit: cover;
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.5s ease;
             pointer-events: none;
+            will-change: opacity;
         }
 
         .bg-video.active {
@@ -92,13 +97,20 @@
             cursor: default;
         }
 
+        /* Индикация, что можно кликнуть */
         .time span {
             display: inline-block;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: color 0.2s, transform 0.1s;
         }
+        
         .time span:hover {
             color: #b0c4de;
+        }
+        
+        /* Эффект нажатия */
+        .time span:active {
+            transform: scale(0.95);
         }
 
         .quote-container {
@@ -114,25 +126,17 @@
             font-size: 18px;
             font-style: italic;
             line-height: 1.5;
-            margin-bottom: 5px;
-        }
-
-        .author {
-            font-family: "Consolas", monospace;
-            font-size: 14px;
-            text-align: right;
-            color: #ffffff;
-            margin-top: 10px;
+            margin-bottom: 0;
         }
     </style>
 </head>
 
-<body>
+<body oncontextmenu="return false;">
 
     <div class="video-container">
-        <video id="vid-hours" class="bg-video" src="video_1.mp4" loop muted playsinline></video>
-        <video id="vid-minutes" class="bg-video" src="video_2.mp4" loop muted playsinline></video>
-        <video id="vid-seconds" class="bg-video" src="video_3.mp4" loop muted playsinline></video>
+        <video id="vid-hours" class="bg-video" src="video_1.mp4" loop muted playsinline preload="none"></video>
+        <video id="vid-minutes" class="bg-video" src="video_2.mp4" loop muted playsinline preload="none"></video>
+        <video id="vid-seconds" class="bg-video" src="video_3.mp4" loop muted playsinline preload="none"></video>
     </div>
 
     <div class="widget">
@@ -149,22 +153,23 @@
 
         <div class="quote-container">
             <div class="quote" id="quote">Loading...</div>
-            <div class="author" id="author"></div>
         </div>
     </div>
 
     <script>
+        // --- 1. ЛОГИКА ВРЕМЕНИ И ЦИТАТ ---
+        
         const quotes = [
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
-            { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
-            { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
-            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
-            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-            { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
-            { text: "The best preparation for tomorrow is doing your best today.", author: "H. Jackson Brown Jr." },
-            { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" },
-            { text: "Action is the foundational key to all success.", author: "Pablo Picasso" },
-            { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" }
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Strive not to be a success, but rather to be of value.",
+            "Every moment is a fresh beginning.",
+            "Believe you can and you're halfway there.",
+            "The only way to do great work is to love what you do.",
+            "The best way to predict the future is to create it.",
+            "The best preparation for tomorrow is doing your best today.",
+            "The only limit to our realization of tomorrow will be our doubts of today.",
+            "Action is the foundational key to all success.",
+            "Discipline is the bridge between goals and accomplishment."
         ];
 
         function updateTimeAndDate() {
@@ -194,9 +199,8 @@
 
         function setRandomQuote() {
             const randomIndex = Math.floor(Math.random() * quotes.length);
-            const selectedQuote = quotes[randomIndex];
-            document.getElementById("quote").innerHTML = formatQuote(selectedQuote.text);
-            document.getElementById("author").textContent = selectedQuote.author;
+            const selectedText = quotes[randomIndex];
+            document.getElementById("quote").innerHTML = formatQuote(selectedText);
         }
 
         updateTimeAndDate();
@@ -204,6 +208,7 @@
         setInterval(updateTimeAndDate, 1000);
         setInterval(setRandomQuote, 60000);
 
+        // --- 2. ЛОГИКА ВИДЕО (OPTIMIZED) ---
 
         const videos = {
             hours: document.getElementById('vid-hours'),
@@ -217,23 +222,29 @@
             const video = videos[key];
             if (!video) return;
 
+            // Если кликнули на то же самое видео
             if (activeVideoKey === key) {
                 if (video.paused) {
+                    // Браузер подгрузит остаток лупа только сейчас
                     video.play();
                     video.classList.add('active');
                 } else {
+                    // Пауза мгновенно останавливает декодирование
                     video.pause();
                     video.classList.remove('active');
                 }
             } 
+            // Если кликнули на другое
             else {
+                // Ставим на паузу старое (экономим CPU и память)
                 if (activeVideoKey && videos[activeVideoKey]) {
                     videos[activeVideoKey].pause();
                     videos[activeVideoKey].classList.remove('active');
                 }
                 
+                // Запускаем новое
                 activeVideoKey = key;
-                video.play();
+                video.play(); // Если видео еще не скачано, оно начнет качаться тут
                 video.classList.add('active');
             }
         }
