@@ -95,27 +95,22 @@
             cursor: default;
         }
 
-        
         .time span {
             display: inline-block;
             cursor: pointer;
-            transition: color 0.2s, transform 0.1s;
+            transition: transform 0.1s;
         }
         
-        .time span:hover {
-            color: #A4D4AE; 
+        .time span:active {
+            transform: scale(0.95);
         }
-        
+
         .quote-container {
             margin-top: 5px;
             padding: 5px;
             border-radius: 1px;
             background: rgba(0, 0, 0, 0.3);
-            color: #A4D4AE; 
-        }
-
-        .time span:active {
-            transform: scale(0.95);
+            color: #9CBFAC;
         }
 
         .quote {
@@ -137,7 +132,7 @@
     </div>
 
     <div class="widget">
-        <div class="day" id="day">Loading...</div>
+        <div class="day" id="day"></div>
         <div class="date" id="date">
             <span id="date-month"></span> 
             <span id="date-day"></span>, 
@@ -149,12 +144,11 @@
         </div>
 
         <div class="quote-container">
-            <div class="quote" id="quote">Loading...</div>
+            <div class="quote" id="quote"></div>
         </div>
     </div>
 
     <script>
-        
         const quotes = [
             "The future belongs to those who believe in the beauty of their dreams.",
             "Strive not to be a success, but rather to be of value.",
@@ -203,7 +197,6 @@
         setRandomQuote();
         setInterval(updateTimeAndDate, 1000);
         setInterval(setRandomQuote, 60000);
-
 
         const videos = {
             hours: document.getElementById('vid-hours'),
