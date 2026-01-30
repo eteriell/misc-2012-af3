@@ -26,22 +26,29 @@
             overflow: hidden;
         }
 
-        .video-bg {
+        .video-container {
             position: fixed;
-            inset: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            overflow: hidden;
         }
 
-        .video-bg iframe {
+        .bg-video {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 120vw;
-            height: 120vh;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; 
             transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .bg-video.active {
+            opacity: 1;
         }
 
         .widget {
@@ -72,12 +79,7 @@
             letter-spacing: 2px;
             margin-bottom: 10px;
             color: #f8f8ff;
-            cursor: pointer;
-        }
-
-        .date span {
-            display: inline-block;
-            cursor: pointer;
+            cursor: default;
         }
 
         .time {
@@ -93,6 +95,10 @@
         .time span {
             display: inline-block;
             cursor: pointer;
+            transition: color 0.3s;
+        }
+        .time span:hover {
+            color: #b0c4de;
         }
 
         .quote-container {
@@ -122,23 +128,27 @@
 </head>
 
 <body>
-    <div class="video-bg" id="video-bg">
-        <div id="yt-audio"></div>
-        <div id="yt-player-hours"></div>
-        <div id="yt-player-minutes"></div>
-        <div id="yt-player-seconds"></div>
+
+    <div class="video-container">
+        <video id="vid-hours" class="bg-video" src="video_1.mp4" loop muted playsinline></video>
+        <video id="vid-minutes" class="bg-video" src="video_2.mp4" loop muted playsinline></video>
+        <video id="vid-seconds" class="bg-video" src="video_3.mp4" loop muted playsinline></video>
     </div>
 
     <div class="widget">
-        <div class="day" id="day">Friday</div>
-        <div class="date" id="date"><span id="date-month"></span> <span id="date-day"></span>, <span id="date-year"></span></div>
+        <div class="day" id="day">Loading...</div>
+        <div class="date" id="date">
+            <span id="date-month"></span> 
+            <span id="date-day"></span>, 
+            <span id="date-year"></span>
+        </div>
 
         <div class="time" id="time">
-            <span id="time-hours">11</span>:<span id="time-minutes">26</span>:<span id="time-seconds">56</span>
+            <span id="time-hours">00</span>:<span id="time-minutes">00</span>:<span id="time-seconds">00</span>
         </div>
 
         <div class="quote-container">
-            <div class="quote" id="quote">Every moment is a fresh beginning.</div>
+            <div class="quote" id="quote">Loading...</div>
             <div class="author" id="author"></div>
         </div>
     </div>
@@ -186,198 +196,52 @@
             const randomIndex = Math.floor(Math.random() * quotes.length);
             const selectedQuote = quotes[randomIndex];
             document.getElementById("quote").innerHTML = formatQuote(selectedQuote.text);
+            document.getElementById("author").textContent = selectedQuote.author;
         }
 
         updateTimeAndDate();
         setRandomQuote();
         setInterval(updateTimeAndDate, 1000);
         setInterval(setRandomQuote, 60000);
-    </script>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        const videoBg = document.getElementById("video-bg");
-        const dateMonth = document.getElementById("date-month");
-        const dateDay = document.getElementById("date-day");
-        const dateYear = document.getElementById("date-year");
-        const hoursSpan = document.getElementById("time-hours");
-        const minutesSpan = document.getElementById("time-minutes");
-        const secondsSpan = document.getElementById("time-seconds");
 
-        let audioPlayer;
-        let visualPlayer;
-
-        let currentAudioTrack = null;
-        let isAudioPlaying = false;
-        const audioTime = Object.create(null);
-
-        let currentVisualKey = null;
-        let isVisualPlaying = false;
-        const visualTime = Object.create(null);
-
-        const VISUAL_VIDEOS = {
-            hours: "DEWzT1geuPU",
-            minutes: "3u0wlqe8lVk",
-            seconds: "zhDwjnYZiCo",
+        const videos = {
+            hours: document.getElementById('vid-hours'),
+            minutes: document.getElementById('vid-minutes'),
+            seconds: document.getElementById('vid-seconds')
         };
 
-        const AUDIO_TRACKS = {
-            month: "eTeD8DAta4c",
-            day: "QHIyFIMu4uQ",
-            year: "f_uSeNs1s2s"
-        };
+        let activeVideoKey = null;
 
-        function onYouTubeIframeAPIReady() {
-            audioPlayer = new YT.Player("yt-audio", {
-                height: "0",
-                width: "0",
-                videoId: AUDIO_TRACKS.month,
-                playerVars: {
-                    autoplay: 0,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
-                    modestbranding: 1,
-                    rel: 0,
-                    loop: 0,
-                    noplaylist: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.href,
-                    playsinline: 1,
-                    enablejsapi: 1
-                },
-                events: {
-                    onStateChange: (e) => {
-                        if (e.data === YT.PlayerState.PLAYING) {
-                            audioPlayer.setPlaybackQuality("tiny");
-                            isAudioPlaying = true;
-                        } else if (e.data === YT.PlayerState.PAUSED) {
-                            isAudioPlaying = false;
-                        }
-                    }
+        function toggleVideo(key) {
+            const video = videos[key];
+            if (!video) return;
+
+            if (activeVideoKey === key) {
+                if (video.paused) {
+                    video.play();
+                    video.classList.add('active');
+                } else {
+                    video.pause();
+                    video.classList.remove('active');
                 }
-            });
-
-            visualPlayer = new YT.Player("yt-player-hours", {
-                height: "100%",
-                width: "100%",
-                videoId: VISUAL_VIDEOS.hours,
-                playerVars: {
-                    autoplay: 0,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
-                    modestbranding: 1,
-                    rel: 0,
-                    loop: 1,
-                    playlist: VISUAL_VIDEOS.hours,
-                    noplaylist: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.href,
-                    playsinline: 1,
-                    enablejsapi: 1
-                },
-                events: {
-                    onStateChange: (e) => {
-                        if (e.data === YT.PlayerState.PLAYING) {
-                            visualPlayer.setPlaybackQuality("hd1080");
-                            isVisualPlaying = true;
-                        } else if (e.data === YT.PlayerState.PAUSED) {
-                            isVisualPlaying = false;
-                        }
-                    }
+            } 
+            else {
+                if (activeVideoKey && videos[activeVideoKey]) {
+                    videos[activeVideoKey].pause();
+                    videos[activeVideoKey].classList.remove('active');
                 }
-            });
-
-            document.getElementById("yt-player-minutes").style.display = "none";
-            document.getElementById("yt-player-seconds").style.display = "none";
-        }
-
-        function safeNow(player) {
-            try {
-                const t = player.getCurrentTime();
-                return Number.isFinite(t) ? t : 0;
-            } catch (_) {
-                return 0;
+                
+                activeVideoKey = key;
+                video.play();
+                video.classList.add('active');
             }
         }
 
-        function toggleAudio(trackId) {
-            if (!audioPlayer) return;
+        document.getElementById("time-hours").addEventListener("click", () => toggleVideo("hours"));
+        document.getElementById("time-minutes").addEventListener("click", () => toggleVideo("minutes"));
+        document.getElementById("time-seconds").addEventListener("click", () => toggleVideo("seconds"));
 
-            if (currentAudioTrack !== trackId) {
-                if (currentAudioTrack) {
-                    audioTime[currentAudioTrack] = safeNow(audioPlayer);
-                }
-                currentAudioTrack = trackId;
-                const start = audioTime[trackId] || 0;
-                audioPlayer.loadVideoById({ videoId: trackId, startSeconds: start });
-                isAudioPlaying = true;
-                return;
-            }
-
-            if (isAudioPlaying) {
-                audioTime[trackId] = safeNow(audioPlayer);
-                audioPlayer.pauseVideo();
-                isAudioPlaying = false;
-                return;
-            }
-
-            const resumeAt = audioTime[trackId] || safeNow(audioPlayer) || 0;
-            audioPlayer.playVideo();
-            if (resumeAt > 0) audioPlayer.seekTo(resumeAt, true);
-            isAudioPlaying = true;
-        }
-
-        function showVideoBg() {
-            videoBg.style.opacity = "1";
-            document.body.style.backgroundImage = "none";
-        }
-
-        function hideVideoBg() {
-            videoBg.style.opacity = "0";
-            document.body.style.background = '#000000 url("image.jpg") center center / cover no-repeat fixed';
-        }
-
-        function toggleVisual(key) {
-            if (!visualPlayer) return;
-
-            const id = VISUAL_VIDEOS[key];
-
-            if (currentVisualKey !== key) {
-                if (currentVisualKey) {
-                    visualTime[currentVisualKey] = safeNow(visualPlayer);
-                }
-                currentVisualKey = key;
-                const start = visualTime[key] || 0;
-                showVideoBg();
-                visualPlayer.loadVideoById({ videoId: id, startSeconds: start });
-                isVisualPlaying = true;
-                return;
-            }
-
-            if (isVisualPlaying) {
-                visualTime[key] = safeNow(visualPlayer);
-                visualPlayer.pauseVideo();
-                isVisualPlaying = false;
-                hideVideoBg();
-                return;
-            }
-
-            const resumeAt = visualTime[key] || safeNow(visualPlayer) || 0;
-            showVideoBg();
-            visualPlayer.playVideo();
-            if (resumeAt > 0) visualPlayer.seekTo(resumeAt, true);
-            isVisualPlaying = true;
-        }
-
-        dateMonth.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.month));
-        dateDay.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.day));
-        dateYear.addEventListener("click", () => toggleAudio(AUDIO_TRACKS.year));
-
-        hoursSpan.addEventListener("click", () => toggleVisual("hours"));
-        minutesSpan.addEventListener("click", () => toggleVisual("minutes"));
-        secondsSpan.addEventListener("click", () => toggleVisual("seconds"));
     </script>
 </body>
 </html>
